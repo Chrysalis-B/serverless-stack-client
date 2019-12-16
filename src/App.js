@@ -29,7 +29,8 @@ export default function App(props) {
 	}
 
 
-	function handleLogout() {
+	async function handleLogout() {
+		await Auth.signOut();
 		userHasAuthenticated(false);
 	}
 
