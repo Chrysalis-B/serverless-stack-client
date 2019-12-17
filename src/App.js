@@ -18,7 +18,8 @@ function App(props) {
 		try {
 			await Auth.currentSession();
 			userHasAuthenticated(true);
-		} catch (err) {
+		} 
+		catch (err) {
 			if (err !== 'No current user') {
 				alert(err);
 			}
