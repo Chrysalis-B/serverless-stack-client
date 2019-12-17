@@ -46,8 +46,21 @@ export default function Signup(props) {
             setNewUser(newUser);
         }
         catch (err) {
-            alert(err.message);
-            setIsLoading(false);
+            if (err.code === 'UsernameExistsException') {
+                try {
+                    const newUser = await Auth.resendSignUp(fields.email);
+                    setIsLoading(false);
+                    setNewUser(newUser);
+                }
+                catch (err) {
+                    alert(err.message);
+                    setIsLoading(false);
+                }
+            }
+            else {
+                alert(err.message);
+                setIsLoading(false);
+            }
         }
 
         setIsLoading(false);
