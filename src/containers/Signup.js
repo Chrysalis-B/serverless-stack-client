@@ -5,6 +5,7 @@ import {
     FormControl,
     ControlLabel
 } from 'react-bootstrap';
+import { Auth } from 'aws-amplify';
 import LoaderButton from '../components/LoaderButton';
 import { useFormFields } from '../libs/hooksLib';
 import './Signup.css';
@@ -36,7 +37,18 @@ export default function Signup(props) {
 
         setIsLoading(true);
 
-        setNewUser('test');
+        try {
+            const newUser = await Auth.signUp({
+                username: fields.email,
+                password: fields.password
+            });
+            setIsLoading(false);
+            setNewUser(newUser);
+        }
+        catch (err) {
+            alert(err.message);
+            setIsLoading(false);
+        }
 
         setIsLoading(false);
     }
@@ -45,6 +57,18 @@ export default function Signup(props) {
         event.preventDefault();
 
         setIsLoading(true);
+
+        try {
+            await Auth.confirmSignUp(fields.email, fields.confirmationCode);
+            await Auth.signIn(fields.email, fields.password);
+
+            props.userHasAuthenticated(true);
+            props.history.push('/');
+        }
+        catch (err) {
+            alert(err.message);
+            setIsLoading(false);
+        }
     }
 
     function renderConfirmationForm() {
@@ -75,49 +99,49 @@ export default function Signup(props) {
 
     function renderForm() {
         return (
-          <form onSubmit={handleSubmit}>
-            <FormGroup controlId="email" bsSize="large">
-              <ControlLabel>Email</ControlLabel>
-              <FormControl
-                autoFocus
-                type="email"
-                value={fields.email}
-                onChange={handleFieldChange}
-              />
-            </FormGroup>
-            <FormGroup controlId="password" bsSize="large">
-              <ControlLabel>Password</ControlLabel>
-              <FormControl
-                type="password"
-                value={fields.password}
-                onChange={handleFieldChange}
-              />
-            </FormGroup>
-            <FormGroup controlId="confirmPassword" bsSize="large">
-              <ControlLabel>Confirm Password</ControlLabel>
-              <FormControl
-                type="password"
-                onChange={handleFieldChange}
-                value={fields.confirmPassword}
-              />
-            </FormGroup>
-            <LoaderButton
-              block
-              type="submit"
-              bsSize="large"
-              isLoading={isLoading}
-              disabled={!validateForm()}
-            >
-              Signup
+            <form onSubmit={handleSubmit}>
+                <FormGroup controlId="email" bsSize="large">
+                    <ControlLabel>Email</ControlLabel>
+                    <FormControl
+                        autoFocus
+                        type="email"
+                        value={fields.email}
+                        onChange={handleFieldChange}
+                    />
+                </FormGroup>
+                <FormGroup controlId="password" bsSize="large">
+                    <ControlLabel>Password</ControlLabel>
+                    <FormControl
+                        type="password"
+                        value={fields.password}
+                        onChange={handleFieldChange}
+                    />
+                </FormGroup>
+                <FormGroup controlId="confirmPassword" bsSize="large">
+                    <ControlLabel>Confirm Password</ControlLabel>
+                    <FormControl
+                        type="password"
+                        onChange={handleFieldChange}
+                        value={fields.confirmPassword}
+                    />
+                </FormGroup>
+                <LoaderButton
+                    block
+                    type="submit"
+                    bsSize="large"
+                    isLoading={isLoading}
+                    disabled={!validateForm()}
+                >
+                    Signup
             </LoaderButton>
-          </form>
+            </form>
         );
-      }
+    }
 
-      return (
+    return (
         <div className="Signup">
-          {newUser === null ? renderForm() : renderConfirmationForm()}
+            {newUser === null ? renderForm() : renderConfirmationForm()}
         </div>
-      );
+    );
 
 }
