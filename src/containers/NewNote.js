@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
+import { API } from "aws-amplify";
 import LoaderButton from '../components/LoaderButton';
 import config from '../config';
 import './NewNote.css';
@@ -26,6 +27,21 @@ export default function NeNote(props) {
         }
 
         setIsLoading(true);
+
+        try {
+            await createNote({content});
+            props.history.push('/');
+        }
+        catch(err) {
+            alert(err);
+            setIsLoading(false);
+        }
+    }
+
+    function createNote(note) {
+        return API.post('notes', '/notes', {
+            body: note
+        })
     }
 
     return (
