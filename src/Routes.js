@@ -4,6 +4,7 @@ import AppliedRoute from "./components/AppliedRoute";
 import Home from './containers/Home';
 import Login from "./containers/Login";
 import Signup from "./containers/Signup";
+import NewNote from "./containers/NewNote";
 import NotFound from "./containers/NotFound";
 
 export default function Routes({ appProps }) {
@@ -12,6 +13,7 @@ export default function Routes({ appProps }) {
 			<AppliedRoute path='/' exact component={Home} appProps={appProps}/>
             <AppliedRoute path="/login" exact component={Login} appProps={appProps}/>
 			<AppliedRoute path="/signup" exact component={Signup} appProps={appProps} />
+			<AppliedRoute path="/notes/new" exact component={NewNote} appProps={appProps} />
             <Route component={NotFound} />
 		</Switch>
 	);
