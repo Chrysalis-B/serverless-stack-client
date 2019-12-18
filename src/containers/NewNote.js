@@ -4,6 +4,7 @@ import { API } from "aws-amplify";
 import LoaderButton from '../components/LoaderButton';
 import config from '../config';
 import './NewNote.css';
+import { s3Upload } from '../libs/awsLib';
 
 export default function NeNote(props) {
     const file = useRef(null);
@@ -29,7 +30,11 @@ export default function NeNote(props) {
         setIsLoading(true);
 
         try {
-            await createNote({content});
+            const attachment = file.current
+                ? await s3Upload(file.current)
+                : null;
+            
+            await createNote({content, attachment});
             props.history.push('/');
         }
         catch(err) {
