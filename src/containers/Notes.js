@@ -1,9 +1,10 @@
-import React, { useRef, useState, useEffect } from "react";
-import { API, Storage } from "aws-amplify";
-import config from "../config";
-import { FormGroup, ControlLabel, FormControl } from "react-bootstrap";
-import LoaderButton from "../components/LoaderButton";
+import React, { useRef, useState, useEffect } from 'react';
+import { API, Storage } from 'aws-amplify';
+import config from '../config';
+import { FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
+import LoaderButton from '../components/LoaderButton';
 import './Notes.css';
+import { s3Upload, s3Removal } from '../libs/awsLib';
 
 export default function Notes(props) {
     const file = useRef(null);
@@ -42,12 +43,17 @@ export default function Notes(props) {
     }
 
     function formatFileName(str) {
-        console.log(str);
         return str.replace(/^\w+-/, '');
     }
 
     function handleFileChange(event) {
         file.current = event.target.files[0];
+    }
+
+    function saveNote(note) {
+        return API.put('notes', `/notes/${props.match.params.id}`, {
+            body: note
+        });
     }
 
     async function handleSubmit(event) {
@@ -61,6 +67,27 @@ export default function Notes(props) {
         }
 
         setIsSubmitting(true);
+
+        try {
+            if(file.current) {
+                attachment = await s3Upload(file.current);
+            }
+
+            await saveNote({
+                content,
+                attachment: attachment || note.attachment
+            });
+
+            if(attachment && note.attachment) {
+                s3Removal(note.attachment);
+            }
+
+            props.history.push('/');
+        }
+        catch(err) {
+            alert(err);
+            setIsSubmitting(false);
+        }
     }
 
     async function handleDelete(event) {
