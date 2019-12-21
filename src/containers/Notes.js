@@ -57,7 +57,8 @@ export default function Notes(props) {
     }
 
     async function handleSubmit(event) {
-        let attachment;
+        const oldAttachment = note.attachment;
+        let newAttachment;
 
         event.preventDefault();
 
@@ -70,16 +71,16 @@ export default function Notes(props) {
 
         try {
             if(file.current) {
-                attachment = await s3Upload(file.current);
+                newAttachment = await s3Upload(file.current);
             }
 
             await saveNote({
                 content,
-                attachment: attachment || note.attachment
+                attachment: newAttachment || oldAttachment
             });
 
-            if(attachment && note.attachment) {
-                s3Removal(note.attachment);
+            if(newAttachment && oldAttachment) {
+                s3Removal(oldAttachment);
             }
 
             props.history.push('/');
