@@ -18,7 +18,7 @@ function App(props) {
 		try {
 			await Auth.currentSession();
 			userHasAuthenticated(true);
-		}
+		} 
 		catch (err) {
 			if (err !== 'No current user') {
 				alert(err);
@@ -46,17 +46,24 @@ function App(props) {
 					<Navbar.Collapse>
 						<Nav pullRight>
 							{isAuthenticated ? (
-								<NavItem onClick={handleLogout}>Logout</NavItem>
+								<>
+									<LinkContainer to='/settings'>
+										<NavItem>Settings</NavItem>
+									</LinkContainer>
+									<NavItem onClick={handleLogout}>
+										Logout
+									</NavItem>
+								</>
 							) : (
-									<>
-										<LinkContainer to='/signup'>
-											<NavItem>Signup</NavItem>
-										</LinkContainer>
-										<LinkContainer to='/login'>
-											<NavItem>Login</NavItem>
-										</LinkContainer>
-									</>
-								)}
+								<>
+									<LinkContainer to='/signup'>
+										<NavItem>Signup</NavItem>
+									</LinkContainer>
+									<LinkContainer to='/login'>
+										<NavItem>Login</NavItem>
+									</LinkContainer>
+								</>
+							)}
 						</Nav>
 					</Navbar.Collapse>
 				</Navbar>
