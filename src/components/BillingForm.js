@@ -51,7 +51,7 @@ function BillingForm({ isLoading, onSubmit, ...props }) {
 				<FormControl
 					type='text'
 					value={fields.name}
-					onChange={handleFieldsChange}
+					onChange={handleFieldChange}
 					placeholder='Name on the card'
 				/>
 			</FormGroup>
