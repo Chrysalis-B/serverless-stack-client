@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from "react-router-dom";
 import './Home.css';
 import { PageHeader, ListGroup, ListGroupItem } from 'react-bootstrap';
 import { API } from 'aws-amplify';
@@ -17,8 +18,7 @@ export default function Home(props) {
 			try {
 				const notes = await loadNotes();
 				setNotes(notes);
-			}
-			catch (err) {
+			} catch (err) {
 				alert(err);
 			}
 
@@ -36,7 +36,8 @@ export default function Home(props) {
 			i !== 0 ? (
 				<LinkContainer key={note.noteId} to={`/notes/${note.noteId}`}>
 					<ListGroupItem header={note.content.trim().split('\n')[0]}>
-						{'Created: ' + new Date(note.createdAt).toLocaleString()}
+						{'Created: ' +
+							new Date(note.createdAt).toLocaleString()}
 					</ListGroupItem>
 				</LinkContainer>
 			) : (
@@ -47,8 +48,8 @@ export default function Home(props) {
 						</h4>
 					</ListGroupItem>
 				</LinkContainer>
-				)
-		)
+			)
+		);
 	}
 
 	function renderLander() {
@@ -56,25 +57,30 @@ export default function Home(props) {
 			<div className='lander'>
 				<h1>Scratch</h1>
 				<p>Make notes and stuff</p>
+				<div>
+					<Link to='/login' className='btn btn-info btn-lg'>
+						Login
+					</Link>
+					<Link to='/signup' className='btn btn-success btn-lg'>
+						Signup
+					</Link>
+				</div>
 			</div>
-		)
+		);
 	}
 
 	function renderNotes() {
 		return (
 			<div className='notes'>
 				<PageHeader>Your Notes</PageHeader>
-				<ListGroup>
-					{!isLoading && renderNotesList(notes)}
-				</ListGroup>
-
-			</div>)
+				<ListGroup>{!isLoading && renderNotesList(notes)}</ListGroup>
+			</div>
+		);
 	}
 
 	return (
 		<div className='Home'>
 			{props.isAuthenticated ? renderNotes() : renderLander()}
 		</div>
-	)
-
+	);
 }

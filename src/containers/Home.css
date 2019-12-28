@@ -3,8 +3,16 @@
 	text-align: center;
 }
 
+.Home .lander div {
+	padding-top: 20px;
+}
+
+.Home .lander div a:first-child {
+	margin-right: 20px;
+}
+
 .Home .lander h1 {
-	font-family: "Open Sans", sans-serif;
+	font-family: 'Open Sans', sans-serif;
 	font-weight: 600;
 }
 
@@ -13,14 +21,14 @@
 }
 
 .Home .notes h4 {
-	font-family: "Open Sans", sans-serif;
+	font-family: 'Open Sans', sans-serif;
 	font-weight: 600;
 	overflow: hidden;
 	line-height: 1.5;
 	white-space: nowrap;
 	text-overflow: ellipsis;
-  }
-  
-  .Home .notes p {
+}
+
+.Home .notes p {
 	color: #666;
-  }
+}
