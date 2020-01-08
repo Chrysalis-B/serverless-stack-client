@@ -27,30 +27,3 @@ export default function asyncComponent(importComponent) {
 
   return AsyncComponent;
 }
-
-
-// import React, { useState, useEffect } from 'react';
-
-// export default function asyncComponent(importComponent) {
-//     function AsyncComponent(props) {
-//         const [component, setComponent] = useState(null);
-
-//         useEffect(() => {
-//             async function onLoad() {
-//                 try {
-//                     const component = await importComponent();
-//                     console.log(component);
-//                     setComponent(component);
-//                 } catch (err) {
-//                     console.error(err);
-//                 }
-//             }
-//             onLoad();
-//         }, []);
-
-//         const C = component;
-
-//         return C ? <C {...props} /> : <div>loading</div>;
-//     }
-//     return AsyncComponent;
-// }
